@@ -40,8 +40,10 @@ LOG_BACKUP_COUNT = 5
 
 def getLogger(name, logFolder=LOG_FOLDER, logFile=LOG_FILE, logMaxSize=LOG_MAX_SIZE, logBackupCount=LOG_BACKUP_COUNT):
     #return logger(name, logFolder, logFile, logMaxSize, logBackupCount)
+    if not logFolder.endswith('/'):
+        logFolder += '/'
     if not os.path.exists(logFolder):
-             os.makedirs(logFolder)
+        os.makedirs(logFolder)
 
     logger = logging.getLogger(name)
     
@@ -49,7 +51,7 @@ def getLogger(name, logFolder=LOG_FOLDER, logFile=LOG_FILE, logMaxSize=LOG_MAX_S
                                                 maxBytes = logMaxSize,
                                                 backupCount = logBackupCount,
                                                 encoding = 'UTF-8')
-    errorRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(module)s %(process)d %(thread)d %(levelname)s %(message)s'))
+    errorRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(name)s %(module)s %(process)d %(threadName)s %(levelname)s %(message)s'))
     errorRotateHandler.setLevel(logging.ERROR)
     logger.addHandler(errorRotateHandler)
 
@@ -57,7 +59,7 @@ def getLogger(name, logFolder=LOG_FOLDER, logFile=LOG_FILE, logMaxSize=LOG_MAX_S
                                                 maxBytes = logMaxSize,
                                                 backupCount = logBackupCount,
                                                 encoding = 'UTF-8')
-    debugRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(module)s %(process)d %(thread)d %(levelname)s %(message)s'))
+    debugRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(name)s %(module)s %(process)d %(threadName)s %(levelname)s %(message)s'))
     debugRotateHandler.setLevel(logging.DEBUG)
     logger.addHandler(debugRotateHandler)
 
@@ -65,13 +67,13 @@ def getLogger(name, logFolder=LOG_FOLDER, logFile=LOG_FILE, logMaxSize=LOG_MAX_S
                                                 maxBytes = logMaxSize,
                                                 backupCount = logBackupCount,
                                                 encoding = 'UTF-8')
-    infoRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(module)s %(process)d %(thread)d %(levelname)s %(message)s'))
+    infoRotateHandler.setFormatter(logging.Formatter('%(asctime)s %(name)s %(module)s %(process)d %(threadName)s %(levelname)s %(message)s'))
     infoRotateHandler.setLevel(logging.INFO)
     logger.addHandler(infoRotateHandler)
 
     logger.setLevel(logging.DEBUG)
 
-    logger.debug('created logger')
+    logger.debug('created logger %s' % name)
 
     return logger
 
